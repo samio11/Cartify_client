@@ -1,8 +1,11 @@
-"use Client";
+"use client";
+import { useUser } from "@/context/UserContext";
 import Link from "next/link";
 import React from "react";
 
 export default function Navbar() {
+  const { user, isLoading } = useUser();
+  console.log(user);
   return (
     <div>
       <div className="navbar bg-base-100 shadow-sm">
