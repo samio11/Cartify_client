@@ -9,7 +9,7 @@ export default async function page() {
   return (
     <div>
       <div className="grid grid-cols-3 gap-3">
-        {productData?.data?.map((x) => (
+        {productData?.data?.map((x: any) => (
           <ProductCard
             key={x._id}
             _id={x._id}
