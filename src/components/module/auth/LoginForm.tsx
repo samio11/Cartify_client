@@ -23,7 +23,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { login } from "@/services/Auth";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -46,6 +46,8 @@ export function LoginForm({
 
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const redirectRoute = useSearchParams().get("redirectPath");
+  console.log(redirectRoute);
   const router = useRouter();
 
   async function onSubmit(userData: z.infer<typeof loginSchema>) {
@@ -56,7 +58,7 @@ export function LoginForm({
       if (result.success) {
         console.log(result);
         toast.success("User Login Done", { id: toastId });
-        router.push("/");
+        router.push(redirectRoute as string);
       } else {
         toast.error(result?.message, { id: toastId });
       }
