@@ -40,7 +40,7 @@ export const getAllReviewData = async () => {
   }
 };
 
-export const getAReviewDataByQuery = async (query: Record<string, string>) => {
+export const getAReviewDataByQuery = async (query: string) => {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/review/get?${query}`,

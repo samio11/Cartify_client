@@ -40,7 +40,7 @@ export const getAllProductData = async () => {
   }
 };
 
-export const getAProductDataByQuery = async (query: Record<string, string>) => {
+export const getAProductDataByQuery = async (query: string) => {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/product/get?${query}`,

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { userInfo } from "./services/Auth/auth.service";
 
-type TRole = keyof typeof roleBasedRoutes;
+export type TRole = keyof typeof roleBasedRoutes;
 const authRoutes = ["/login", "/register"];
 const roleBasedRoutes = {
   user: [/^\/user/],
