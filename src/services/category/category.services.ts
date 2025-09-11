@@ -40,9 +40,7 @@ export const getAllCategoryData = async () => {
   }
 };
 
-export const getACategoryDataByQuery = async (
-  query: Record<string, string>
-) => {
+export const getACategoryDataByQuery = async (query: string) => {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/category/get?${query}`,
