@@ -15,22 +15,50 @@ import Logo from "../../../public/Logo";
 import { usePathname } from "next/navigation";
 import { useUser } from "@/context/UserContext";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { userLogout } from "@/services/Auth/auth.service";
-
-// Navigation links array to be used in both desktop and mobile menus
-
+import {
+  CarTaxiFront,
+  LayoutDashboard,
+  LogIn,
+  LogOut,
+  ShoppingBasket,
+  ShoppingCart,
+} from "lucide-react";
+import { getAllCartDataByUser } from "@/services/cart/cart.services";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 export default function Navbar() {
   const pathName = usePathname();
+  const [userCartData, setUserCartData] = useState([]);
   // console.log(pathName);
-  const { user, setIsLoading } = useUser();
+  const { user, setIsLoading, isLoading } = useUser();
   console.log(user);
-
-  useEffect(() => {
+  const handleUserCart = async () => {
+    const { data } = await getAllCartDataByUser();
+    setUserCartData(data);
     setIsLoading(true);
-  }, []);
-
+  };
+  useEffect(() => {
+    handleUserCart();
+    setIsLoading(true);
+  }, [isLoading]);
   const handleLogout = async () => {
     const toastId = toast.loading("User Logging...");
     try {
@@ -42,7 +70,7 @@ export default function Navbar() {
       toast.error(err?.message, { id: toastId });
     }
   };
-
+  console.log("User Cart Data", userCartData);
   const navigationLinks = [
     { href: "/", label: "Home" },
     { href: "/products", label: "Product" },
@@ -127,19 +155,93 @@ export default function Navbar() {
           </div>
         </div>
         {/* Right side */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
           {user?.email ? (
             <>
-              <Button onClick={handleLogout} size="sm" className="text-sm">
+              {/* Dashboard Link */}
+              {user?.role === "customer" && (
+                <>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger
+                      disabled={userCartData?.length === 0}
+                      className="flex justify-center items-center gap-1"
+                    >
+                      <ShoppingCart></ShoppingCart>
+                      <span> {userCartData?.length}</span>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuLabel>Cart Info</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead className="w-[100px]">
+                                Product Name
+                              </TableHead>
+                              <TableHead>Status</TableHead>
+                              <TableHead>Quantity</TableHead>
+                              <TableHead className="text-right">
+                                Per Price
+                              </TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {userCartData &&
+                              userCartData?.map((x) => (
+                                <TableRow>
+                                  <TableCell className="font-medium">
+                                    {x?.productId?.title}
+                                  </TableCell>
+                                  <TableCell>{x?.status}</TableCell>
+                                  <TableCell>{x?.quantity}</TableCell>
+                                  <TableCell className="text-right">
+                                    {x?.priceAtAdd}
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                          </TableBody>
+                        </Table>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <Link
+                    href="/customer/dashboard"
+                    className="flex items-center gap-2 text-sm font-medium hover:underline transition-colors"
+                  >
+                    <LayoutDashboard size={18} />
+                    Customer Dashboard
+                  </Link>
+                </>
+              )}
+              {user?.role === "admin" && (
+                <Link
+                  href="/admin/dashboard"
+                  className="flex items-center gap-2 text-sm font-medium hover:text-purple-600 transition-colors"
+                >
+                  <LayoutDashboard size={18} />
+                  Admin Dashboard
+                </Link>
+              )}
+              {/* Logout Button */}
+              <Button
+                onClick={handleLogout}
+                size="sm"
+                variant="default"
+                className="flex items-center gap-2 text-sm shadow-md hover:shadow-lg transition-all"
+              >
+                <LogOut size={16} />
                 Logout
               </Button>
             </>
           ) : (
-            <>
-              <Button size="sm" className="text-sm">
-                <Link href={"/login"}>Login</Link>
-              </Button>
-            </>
+            <Button
+              size="sm"
+              className="flex items-center gap-2 text-sm bg-black  shadow-md hover:shadow-lg transition-all"
+            >
+              <LogIn size={16} />
+              <Link href="/login">Login</Link>
+            </Button>
           )}
         </div>
       </div>

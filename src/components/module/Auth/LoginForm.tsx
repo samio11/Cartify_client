@@ -48,7 +48,7 @@ export function LoginForm({
     try {
       const result = await userLogin(loginInfo);
       //   console.log(result);
-      if (result) {
+      if (result?.success) {
         toast.success(result?.message, { id: toastId });
         route.push(redirectPath);
       } else {

@@ -24,9 +24,9 @@ export const getAllUserData = async () => {
   }
 };
 
-export const getAUserDataByQuery = async (query: Record<string, string>) => {
+export const getAUserDataByQuery = async (query: string) => {
   try {
-    const token = (await cookies())?.get("accessToken")?.value;
+    const token = (await cookies()).get("accessToken")?.value;
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/get-users?${query}`,
       {
@@ -35,21 +35,23 @@ export const getAUserDataByQuery = async (query: Record<string, string>) => {
           Authorization: `${token}`,
         },
         next: {
-          tags: ["user"],
+          tags: ["user1"],
         },
       }
     );
+
     return await res.json();
   } catch (err) {
+    console.error("Error fetching user data:", err);
     throw err;
   }
 };
 
-export const updateAUserData = async (id: string, userData: FormData) => {
+export const updateAUserData = async (userData: FormData) => {
   try {
     const token = (await cookies()).get("accessToken")?.value;
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/update-user/${id}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/update-user`,
       {
         method: "PATCH",
         headers: {
@@ -58,9 +60,13 @@ export const updateAUserData = async (id: string, userData: FormData) => {
         body: userData,
       }
     );
-    revalidateTag("user");
-    return await res.json();
+    const result = await res.json();
+    // console.log(result);
+
+    revalidateTag("user1");
+    return result;
   } catch (err) {
+    console.log(err);
     throw err;
   }
 };

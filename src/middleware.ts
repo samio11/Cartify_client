@@ -5,7 +5,7 @@ import { userInfo } from "./services/Auth/auth.service";
 export type TRole = keyof typeof roleBasedRoutes;
 const authRoutes = ["/login", "/register"];
 const roleBasedRoutes = {
-  user: [/^\/user/],
+  user: [/^\/customer/],
   admin: [/^\/admin/],
 };
 
@@ -37,8 +37,8 @@ export const config = {
   matcher: [
     "/product",
     "/cart",
-    "/user",
-    "/user/:page",
+    "/customer",
+    "/customer/:page",
     "/admin",
     "/admin/:page",
   ],

@@ -41,6 +41,28 @@ export const getAllCartDataByUser = async () => {
     throw err;
   }
 };
+export const getAllCartDataByAdmin = async () => {
+  try {
+    const token = (await cookies()).get("accessToken")?.value;
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/cart/get-admin`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `${token}`,
+        },
+        next: {
+          tags: ["cart"],
+        },
+      }
+    );
+    const result = await res.json();
+    console.log(result);
+    return result;
+  } catch (err) {
+    throw err;
+  }
+};
 
 export const deleteACart = async (cartId: string) => {
   try {
