@@ -24,3 +24,22 @@ export const getAllPaymentDataByAdmin = async () => {
     throw err;
   }
 };
+export const createPayment = async (cartId: string) => {
+  try {
+    const token = (await cookies()).get("accessToken")?.value;
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/payment/create/${cartId}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `${token}`,
+        },
+      }
+    );
+    const result = await res.json();
+    console.log(result);
+    return result;
+  } catch (err) {
+    throw err;
+  }
+};

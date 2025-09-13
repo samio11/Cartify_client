@@ -32,10 +32,10 @@ type Payment = {
   cartId?: Cart | null;
   transection_id: string;
   amount: number;
-  status: "SUCCESS" | "FAILED" | "PENDING";
+  status: "COMPLETE" | "FAILED" | "PENDING";
 };
 
-export default function PaymentTable({
+export default function AdminPaymentTable({
   data,
   onEdit,
   onDelete,
@@ -83,7 +83,7 @@ export default function PaymentTable({
                   <TableCell>
                     <Badge
                       className={
-                        payment.status === "SUCCESS"
+                        payment.status === "COMPLETE"
                           ? "bg-green-500"
                           : payment.status === "FAILED"
                           ? "bg-red-500"

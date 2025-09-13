@@ -12,13 +12,16 @@ export const createCart = async (cartData: FieldValues) => {
       {
         method: "POST",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `${token}`,
         },
         body: JSON.stringify(cartData),
       }
     );
+    const result = await res.json();
     revalidateTag("cart");
-    return await res.json();
+    // console.log(result);
+    return result;
   } catch (err) {
     throw err;
   }

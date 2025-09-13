@@ -12,7 +12,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { useUser } from "@/context/UserContext";
-import { TRole } from "@/middleware";
+import { CartModal } from "./ProductCartModal";
 
 export interface Product {
   _id: string;
@@ -39,6 +39,7 @@ interface ProductPageProps {
 export default function ProductDetails({ product }: ProductPageProps) {
   const [selectedImage, setSelectedImage] = useState(product?.images[0]);
   const { user, setIsLoading } = useUser();
+  const [cartModalOpen, setCartModalOpen] = useState(false);
   const [wishlisted, setWishlisted] = useState(false);
 
   const calculateDiscount = (price: number, compareAtPrice: number) => {
@@ -57,9 +58,7 @@ export default function ProductDetails({ product }: ProductPageProps) {
       />
     ));
   };
-  const handleCart = async () => {
-    console.log(`Cart Clicked`);
-  };
+
   return (
     <div className="bg-white py-8">
       <div className="container mx-auto px-4 max-w-6xl">
@@ -224,19 +223,34 @@ export default function ProductDetails({ product }: ProductPageProps) {
 
             {/* Buttons */}
             <div className="flex gap-4 mt-8">
-              <button
+              {/* <button
                 disabled={!user}
                 onClick={handleCart}
                 className="flex-1 flex items-center justify-center gap-2 bg-gray-900 text-white py-3.5 rounded-lg hover:bg-gray-800 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 <ShoppingCart className="w-5 h-5" /> Add to Cart
-              </button>
+              </button> */}
+
               <button
+                disabled={!user}
+                onClick={() => setCartModalOpen(true)}
+                className="flex-1 flex items-center justify-center gap-2 bg-gray-900 text-white py-3.5 rounded-lg hover:bg-gray-800 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                <ShoppingCart className="w-5 h-5" /> Add to Cart
+              </button>
+
+              {/* <button
                 disabled={!user}
                 className="flex-1 flex items-center justify-center gap-2 bg-blue-600 text-white py-3.5 rounded-lg hover:bg-blue-700 transition-all disabled:bg-blue-400 disabled:cursor-not-allowed"
               >
                 <CreditCard className="w-5 h-5" /> Buy Now
-              </button>
+              </button> */}
+
+              <CartModal
+                open={cartModalOpen}
+                onOpenChange={setCartModalOpen}
+                cart={product}
+              />
             </div>
           </div>
         </div>

@@ -14,6 +14,10 @@ import Lottie from "lottie-react";
 import noDataAnimation from "../../../../../../public/No-Data.json";
 import Swal from "sweetalert2";
 import { deleteACart } from "@/services/cart/cart.services";
+import { CreditCard } from "lucide-react"; // ✅ Icon for Payment button
+import { toast } from "sonner";
+import { createPayment } from "@/services/payment/payment.services";
+import { useRouter } from "next/navigation";
 
 type CartItem = {
   _id: string;
@@ -35,6 +39,8 @@ type CartItem = {
 };
 
 export default function CartTable({ data }: { data: CartItem[] }) {
+  const router = useRouter();
+
   const handleDelete = (id: string) => {
     console.log("Deleting cart item:", id);
 
@@ -67,6 +73,23 @@ export default function CartTable({ data }: { data: CartItem[] }) {
     });
   };
 
+  const handlePayment = async (cartId: string) => {
+    const toastId = toast.loading("Payment Url is Logging...");
+    try {
+      const result = await createPayment(cartId);
+      console.log(result);
+      if (result?.success) {
+        toast.success(result?.message, { id: toastId });
+        router.push(`${result?.data?.payment_url}`);
+      } else {
+        toast.error("User Payment Failed", { id: toastId });
+      }
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err?.message, { id: toastId });
+    }
+  };
+
   if (!data || data.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-10">
@@ -92,6 +115,7 @@ export default function CartTable({ data }: { data: CartItem[] }) {
             <TableHead>Total</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Action</TableHead>
+            <TableHead>Payment</TableHead> {/* ✅ Added header */}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -134,6 +158,20 @@ export default function CartTable({ data }: { data: CartItem[] }) {
                   </Button>
                 ) : (
                   <span className="text-gray-400 text-sm">N/A</span>
+                )}
+              </TableCell>
+              <TableCell>
+                {item.status === "PENDING" ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handlePayment(item._id)}
+                  >
+                    <CreditCard className="w-4 h-4 mr-1" />
+                    Pay
+                  </Button>
+                ) : (
+                  <span className="text-gray-400 text-sm">Paid</span>
                 )}
               </TableCell>
             </TableRow>
