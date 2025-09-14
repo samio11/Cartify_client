@@ -6,7 +6,8 @@ It provides a smooth shopping experience with **authentication, product manageme
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/9502a658-2f5a-4452-b101-395b933755c4" />
 
-
+## 📺 Vedio
+https://drive.google.com/file/d/1j0zbbrBP_P2ZG_jMSnnr1TtQB6_Ct7qJ/view?usp=sharing
 ## Features
 
 - **Role‑Based Routing** – Admin and customer dashboards protected by Next.js middleware.
