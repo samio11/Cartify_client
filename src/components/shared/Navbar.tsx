@@ -188,7 +188,7 @@ export default function Navbar() {
                           </TableHeader>
                           <TableBody>
                             {userCartData &&
-                              userCartData?.map((x) => (
+                              userCartData?.map((x: any) => (
                                 <TableRow>
                                   <TableCell className="font-medium">
                                     {x?.productId?.title}

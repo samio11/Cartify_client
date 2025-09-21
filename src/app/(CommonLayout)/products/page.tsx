@@ -59,7 +59,7 @@ export default function Product() {
 
       if (searchQuery) {
         filteredProducts = filteredProducts.filter(
-          (product) =>
+          (product: any) =>
             product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
             product.description
               .toLowerCase()
@@ -69,11 +69,11 @@ export default function Product() {
 
       // Sort products
       if (sortBy === "price-low") {
-        filteredProducts.sort((a, b) => a.price - b.price);
+        filteredProducts.sort((a: any, b: any) => a.price - b.price);
       } else if (sortBy === "price-high") {
-        filteredProducts.sort((a, b) => b.price - a.price);
+        filteredProducts.sort((a: any, b: any) => b.price - a.price);
       } else if (sortBy === "rating") {
-        filteredProducts.sort((a, b) => b.ratingAvg - a.ratingAvg);
+        filteredProducts.sort((a: any, b: any) => b.ratingAvg - a.ratingAvg);
       }
 
       setLoadProduct(filteredProducts);
@@ -191,7 +191,7 @@ export default function Product() {
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Categories</SelectLabel>
-                      {loadCategory?.map((x) => (
+                      {loadCategory?.map((x: any) => (
                         <SelectItem key={x?._id} value={x?._id}>
                           {x?.name}
                         </SelectItem>
@@ -237,7 +237,7 @@ export default function Product() {
                 )}
               >
                 <AnimatePresence mode="popLayout">
-                  {loadProduct.map((p) => (
+                  {loadProduct.map((p: any) => (
                     <motion.div
                       key={p._id}
                       layout
