@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+# 🛒 Cartify – Modern E-Commerce Platform (Client)
+
+Cartify is a **full-stack e-commerce platform** frontend built with **Next.js 15** and **React 19**.  
+It provides a smooth shopping experience with **authentication, product management, cart, payment, review system, and admin dashboard**.
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/9502a658-2f5a-4452-b101-395b933755c4" />
+
+## 📺 Vedio
+https://drive.google.com/file/d/1j0zbbrBP_P2ZG_jMSnnr1TtQB6_Ct7qJ/view?usp=sharing
+## Features
+
+- **Role‑Based Routing** – Admin and customer dashboards protected by Next.js middleware.
+- **Server‑Side Data Fetching** – Uses `fetch` with Next.js cache tags for ISR.
+- **Reusable UI Primitives** – Shadcn/ui components (`button`, `dialog`, `table`, etc.).
+- **Responsive Design** – Mobile‑first layout with custom `useIsMobile` hook.
+- **Animations** – Lottie animations for loading and 404 pages.
+- **File Upload** – Single image uploader component.
+- **Authentication** – Context‑based user handling with JWT stored in cookies.
+
+## Tech Stack
+
+| Category | Tools |
+|----------|-------|
+| **Framework** | Next.js 13 (App Router) |
+| **Language** | TypeScript |
+| **Styling** | Tailwind CSS, shadcn/ui |
+| **State** | React Context (`UserContext`) |
+| **Animations** | Lottie (`lottie-react`) |
+| **API Calls** | `fetch` with server actions |
+| **Deployment** | Vercel (compatible) |
+| **Version Control** | Git |
+
+## Project Structure
+
+```
+src/
+├─ app/
+│  ├─ (CommonLayout)      # Public pages (home, product, auth)
+│  ├─ (DashboardLayout)   # Admin & customer dashboards
+│  └─ ...                 # Layouts, loading, not‑found
+├─ components/
+│  ├─ module/             # Feature modules (Auth, Dashboard, Home, ProductDetails)
+│  ├─ shared/             # Footer, Navbar, HomeSlider, ImageUploader
+│  └─ ui/                 # Shadcn UI primitives
+├─ context/               # UserContext
+├─ hooks/                 # Custom hooks (use‑mobile, file‑upload)
+├─ lib/                   # Utility functions (cn)
+├─ services/              # API wrappers (Auth, Cart, Category, Payment, Product, Review, User)
+├─ provider/              # Provider component
+└─ middleware.ts          # Role‑based route protection
+public/
+│  ├─ images, icons, Lottie JSON files
+│  └─ favicon.ico
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- **Node.js** ≥ 18
+- **pnpm** or **npm** (the repo uses a `package-lock.json`, so npm works out of the box)
+- Access to the **Cartify backend API** (set `NEXT_PUBLIC_BACKEND_URL`)
+
+### Installation
+
+```bash
+git clone https://github.com/your-username/Cartify_client.git
+cd Cartify_client
+npm install
+```
+
+### Environment Variables
+
+Create a `.env.local` file at the project root:
+
+```env
+NEXT_PUBLIC_BACKEND_URL=https://your-backend-api.com
+```
+
+> The authentication token is stored in an `accessToken` cookie; the backend should set this on login.
+
+## Running Locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000` in your browser. The app will automatically reload on file changes.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The repository is Vercel‑ready. Just push to a GitHub branch connected to Vercel, and Vercel will:
 
-## Learn More
+1. Install dependencies.
+2. Build with `next build`.
+3. Deploy the output.
 
-To learn more about Next.js, take a look at the following resources:
+Make sure to add the same `NEXT_PUBLIC_BACKEND_URL` environment variable in the Vercel dashboard.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project is licensed under the MIT License. See the `LICENSE` file for details.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+--- 
