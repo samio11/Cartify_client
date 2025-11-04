@@ -18,14 +18,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { userLogout } from "@/services/Auth/auth.service";
-import {
-  CarTaxiFront,
-  LayoutDashboard,
-  LogIn,
-  LogOut,
-  ShoppingBasket,
-  ShoppingCart,
-} from "lucide-react";
+import { LayoutDashboard, LogIn, LogOut, ShoppingCart } from "lucide-react";
 import { getAllCartDataByUser } from "@/services/cart/cart.services";
 import {
   DropdownMenu,
@@ -38,27 +31,28 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
+  TableCell,
 } from "@/components/ui/table";
+
 export default function Navbar() {
   const pathName = usePathname();
   const [userCartData, setUserCartData] = useState([]);
-  // console.log(pathName);
   const { user, setIsLoading, isLoading } = useUser();
-  console.log(user);
+
   const handleUserCart = async () => {
     const { data } = await getAllCartDataByUser();
     setUserCartData(data);
     setIsLoading(true);
   };
+
   useEffect(() => {
     handleUserCart();
     setIsLoading(true);
   }, [isLoading]);
+
   const handleLogout = async () => {
     const toastId = toast.loading("User Logging...");
     try {
@@ -70,23 +64,25 @@ export default function Navbar() {
       toast.error(err?.message, { id: toastId });
     }
   };
-  console.log("User Cart Data", userCartData);
+
   const navigationLinks = [
     { href: "/", label: "Home" },
     { href: "/products", label: "Product" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
   ];
+
   return (
     <header className="border-b px-4 md:px-6">
       <div className="flex h-16 justify-between gap-4">
         {/* Left side */}
         <div className="flex gap-2">
+          {/* Mobile Menu */}
           <div className="flex items-center md:hidden">
-            {/* Mobile menu trigger */}
             <Popover>
               <PopoverTrigger asChild>
                 <Button className="group size-8" variant="ghost" size="icon">
+                  {/* burger menu icon */}
                   <svg
                     className="pointer-events-none"
                     width={16}
@@ -97,19 +93,18 @@ export default function Navbar() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
                       d="M4 12L20 12"
-                      className="origin-center -translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-x-0 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[315deg]"
+                      className="origin-center -translate-y-[7px] transition-all group-aria-expanded:rotate-[315deg]"
                     />
                     <path
                       d="M4 12H20"
-                      className="origin-center transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.8)] group-aria-expanded:rotate-45"
+                      className="origin-center transition-all group-aria-expanded:rotate-45"
                     />
                     <path
                       d="M4 12H20"
-                      className="origin-center translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[135deg]"
+                      className="origin-center translate-y-[7px] transition-all group-aria-expanded:rotate-[135deg]"
                     />
                   </svg>
                 </Button>
@@ -119,11 +114,15 @@ export default function Navbar() {
                   <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                     {navigationLinks.map((link, index) => (
                       <NavigationMenuItem key={index} className="w-full">
-                        <NavigationMenuLink
-                          className="py-1.5"
-                          active={link.href == pathName ? true : false}
-                        >
-                          <Link href={link.href}>{link.label}</Link>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            href={link.href}
+                            className={`py-1.5 block ${
+                              pathName === link.href ? "text-primary" : ""
+                            }`}
+                          >
+                            {link.label}
+                          </Link>
                         </NavigationMenuLink>
                       </NavigationMenuItem>
                     ))}
@@ -132,21 +131,27 @@ export default function Navbar() {
               </PopoverContent>
             </Popover>
           </div>
-          {/* Main nav */}
+
+          {/* Desktop Navigation */}
           <div className="flex items-center gap-6">
-            <a href="#" className="text-primary hover:text-primary/90">
+            <Link href="/" className="text-primary hover:text-primary/90">
               <Logo />
-            </a>
-            {/* Navigation menu */}
+            </Link>
             <NavigationMenu className="h-full *:h-full max-md:hidden">
               <NavigationMenuList className="h-full gap-2">
                 {navigationLinks.map((link, index) => (
                   <NavigationMenuItem key={index} className="h-full">
-                    <NavigationMenuLink
-                      active={link.href == pathName ? true : false}
-                      className="text-muted-foreground hover:text-primary border-b-primary hover:border-b-primary data-[active]:border-b-primary h-full justify-center rounded-none border-y-2 border-transparent py-1.5 font-medium hover:bg-transparent data-[active]:bg-transparent!"
-                    >
-                      <Link href={link.href}>{link.label}</Link>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href={link.href}
+                        className={`text-muted-foreground hover:text-primary border-b-primary hover:border-b-primary data-[active]:border-b-primary h-full justify-center rounded-none border-y-2 border-transparent py-1.5 font-medium hover:bg-transparent ${
+                          pathName === link.href
+                            ? "border-b-primary text-primary"
+                            : ""
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                 ))}
@@ -154,11 +159,12 @@ export default function Navbar() {
             </NavigationMenu>
           </div>
         </div>
+
         {/* Right side */}
         <div className="flex items-center gap-4">
           {user?.email ? (
             <>
-              {/* Dashboard Link */}
+              {/* Cart Dropdown */}
               {user?.role === "customer" && (
                 <>
                   <DropdownMenu>
@@ -166,8 +172,8 @@ export default function Navbar() {
                       disabled={userCartData?.length === 0}
                       className="flex justify-center items-center gap-1"
                     >
-                      <ShoppingCart></ShoppingCart>
-                      <span> {userCartData?.length}</span>
+                      <ShoppingCart />
+                      <span>{userCartData?.length}</span>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                       <DropdownMenuLabel>Cart Info</DropdownMenuLabel>
@@ -187,24 +193,24 @@ export default function Navbar() {
                             </TableRow>
                           </TableHeader>
                           <TableBody>
-                            {userCartData &&
-                              userCartData?.map((x: any) => (
-                                <TableRow>
-                                  <TableCell className="font-medium">
-                                    {x?.productId?.title}
-                                  </TableCell>
-                                  <TableCell>{x?.status}</TableCell>
-                                  <TableCell>{x?.quantity}</TableCell>
-                                  <TableCell className="text-right">
-                                    {x?.priceAtAdd}
-                                  </TableCell>
-                                </TableRow>
-                              ))}
+                            {userCartData?.map((x: any) => (
+                              <TableRow key={x?._id}>
+                                <TableCell className="font-medium">
+                                  {x?.productId?.title}
+                                </TableCell>
+                                <TableCell>{x?.status}</TableCell>
+                                <TableCell>{x?.quantity}</TableCell>
+                                <TableCell className="text-right">
+                                  {x?.priceAtAdd}
+                                </TableCell>
+                              </TableRow>
+                            ))}
                           </TableBody>
                         </Table>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
+
                   <Link
                     href="/customer/dashboard"
                     className="flex items-center gap-2 text-sm font-medium hover:underline transition-colors"
@@ -214,6 +220,7 @@ export default function Navbar() {
                   </Link>
                 </>
               )}
+
               {user?.role === "admin" && (
                 <Link
                   href="/admin/dashboard"
@@ -223,6 +230,7 @@ export default function Navbar() {
                   Admin Dashboard
                 </Link>
               )}
+
               {/* Logout Button */}
               <Button
                 onClick={handleLogout}
@@ -237,7 +245,7 @@ export default function Navbar() {
           ) : (
             <Button
               size="sm"
-              className="flex items-center gap-2 text-sm bg-black  shadow-md hover:shadow-lg transition-all"
+              className="flex items-center gap-2 text-sm bg-black shadow-md hover:shadow-lg transition-all"
             >
               <LogIn size={16} />
               <Link href="/login">Login</Link>
