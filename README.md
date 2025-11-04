@@ -8,6 +8,9 @@ It provides a smooth shopping experience with **authentication, product manageme
 
 ## 📺 Vedio
 https://drive.google.com/file/d/1j0zbbrBP_P2ZG_jMSnnr1TtQB6_Ct7qJ/view?usp=sharing
+
+## 🌐 Live Link
+https://craftify-server.vercel.app
 ## Features
 
 - **Role‑Based Routing** – Admin and customer dashboards protected by Next.js middleware.
